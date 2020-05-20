@@ -1,0 +1,234 @@
+<dashboard theme="dark">
+  <label>Jamf Protect</label>
+  <row>
+    <panel>
+      <single>
+        <title>Events Detected (Total, Last 30 days)</title>
+        <search>
+          <query>source = "JamfProtect" 
+| stats count
+| rename count as "Events"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Events Detected (Total by date, Last 30 days)</title>
+        <search>
+          <query>source = "JamfProtect" 
+| timechart count 
+| rename count as "Events"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0x5b6982]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Events Detected (Count by Type, Last 30 days)</title>
+        <search>
+          <query>source = "JamfProtect" 
+| timechart count by input.eventType
+| rename count as "Events"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Observed Events by Type</title>
+        <search>
+          <query>source = "JamfProtect" 
+| stats count by input.eventType
+| rename
+    input.eventType AS "Event Type",
+    input.match.facts{}.name AS "Event",
+    count AS "Count"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="height">385</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Event Counts (Top 10)</title>
+      <table>
+        <search>
+          <query>source = "JamfProtect" 
+| stats count by input.eventType, input.match.facts{}.name
+| rename
+    input.eventType AS "Event Type",
+    input.match.facts{}.name AS "Event",
+    count AS "Count" 
+| sort Count desc 
+| head 10</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">100</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>File System Event Types</title>
+      <chart>
+        <search>
+          <query>source = "JamfProtect" input.eventType="GPFSEvent"
+| stats count by input.match.facts{}.name
+| rename
+    input.match.facts{}.name AS "Event",
+    count AS "Count"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Process Event Types</title>
+      <chart>
+        <search>
+          <query>source = "JamfProtect" input.eventType="GPProcessEvent"
+| stats count by input.match.facts{}.name
+| rename
+    input.match.facts{}.name AS "Event",
+    count AS "Count"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>USB Event Types</title>
+      <chart>
+        <search>
+          <query>source = "JamfProtect" input.eventType="GPUSBEvent"
+| stats count by input.match.facts{}.name
+| rename
+    input.match.facts{}.name AS "Event",
+    count AS "Count"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Gatekeeper Event Types</title>
+      <chart>
+        <search>
+          <query>source = "JamfProtect" input.eventType="GPGatekeeperEvent"
+| stats count by input.match.facts{}.name
+| rename
+    input.match.facts{}.name AS "Event",
+    count AS "Count"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Top Gatekeeper Blocked Items</title>
+      <table>
+        <search>
+          <query>source = "JamfProtect" input.eventType="GPGatekeeperEvent" | stats count by input.match.facts{}.name, input.match.event.path 
+| rename 
+input.match.facts{}.name AS "Block Type",
+input.match.event.path  AS "Executable" 
+| head 10</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">100</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

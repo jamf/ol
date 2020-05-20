@@ -1,0 +1,356 @@
+<dashboard theme="dark">
+  <label>Jamf Pro Dashboard</label>
+  <row>
+    <panel>
+      <title>Jamf Pro Devices</title>
+      <single>
+        <title>(Drill-down Example...)</title>
+        <search>
+          <query>source="jamf://JamfPro_Computers"
+| dedup computer.general.id 
+| stats count(computer.general.id)</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">129</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x555","0x555"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="underLabel">macOS Computers</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <drilldown>
+          <link target="_blank">/app/search/device_details</link>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Device Model and Version</title>
+        <search>
+          <query>source="jamf://jamfpro_computers"
+`comment("PURPOSE: Show a pie or stacked bar chart of the counts for each hardware model")`
+`comment("Get the jamf data...")`
+source="jamf://jamfpro_computers"
+`comment("Get only the events that have model information..")`
+computer.hardware.model=*
+`comment("Get the most recent event for each computer ID..")`
+| dedup computer.self.id
+`comment("Get the count of computers for each model..")`
+| stats count by computer.hardware.model 
+| sort count desc</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="height">400</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Device Model</title>
+        <search>
+          <query>source="jamf://JamfPro_Computers" computer.hardware.model_identifier = * 
+| dedup computer.self.id 
+| eval model='computer.hardware.model_identifier'
+| rex field=model "\“{0,1}(?&lt;model&gt;.*?)\d.*"
+| stats count by model
+| sort count desc
+`comment("
+Get jamfpro data, 
+Filter for events that have the model id, 
+Strip off the numbers... e.g., MacBook1,1 becomes just Macbook
+-Count 'em
+")`</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <map>
+        <title>Device Locations</title>
+        <search>
+          <query>source="jamf://JamfPro_Computers" computer.general.ip_address=*
+`comment("GET THE MOST RECENT EVENT FOR EACH DEVICE")`
+| dedup computer.self.id 
+| iplocation computer.general.ip_address
+| eval City = if (City = "", if(Region = "", if(Country = "", "N/A", Country), Region), City) 
+| geostats count by City globallimit=0</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">400</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">auto</option>
+        <option name="mapping.choroplethLayer.maximumColor">0x5b6982</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x5b6982</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(38.75,-96.5)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">4</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.seriesColors">[0x778eb1]</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">marker</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Remote Management Enabled</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.remote_management.managed
+| chart count by computer.general.remote_management.managed</query>
+          <earliest>@y</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Supervised</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.supervised
+| chart count by computer.general.supervised</query>
+          <earliest>@y</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="charting.drilldown">all</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>MDM Capable</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.mdm_capable
+| chart count by computer.general.mdm_capable</query>
+          <earliest>@y</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Automated Enrollment</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.management_status.enrolled_via_dep
+| chart count by computer.general.management_status.enrolled_via_dep</query>
+          <earliest>@y</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>User Approved MDM</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.management_status.user_approved_mdm
+| chart count by computer.general.management_status.user_approved_mdm</query>
+          <earliest>@y</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Device Enrollments by Date</title>
+        <search>
+          <query>`comment("
+Graph jamf's string UTC times by converting to unixtime.
+Just an example... in reality, it would be more efficient to use jamf's epoch times
+
+computer.general.last_enrolled_date_utc = 2020-02-23T20:18:27.681+0000
+
+Splunk time format specifiers:
+Short version of UTC: %FT%T.%3N%z
+Long version of UTC: %Y-%m-%dT%H:%M:%S.%3Q%z
+%T	The time in 24-hour notation (%H:%M:%S). For example 23:59:59.
+%F	Equivalent to %Y-%m-%d (the ISO 8601 date format).
+%Y	Year as a decimal number with century. For example, 2017
+%m	Month as a decimal number. (01 to 12). Leading zeros are accepted but not required.
+%d	Day of the month as a decimal number, includes a leading zero. (01 to 31)
+%3Q = milliseconds, with values of 000-999
+%z	The timezone offset from UTC, in hour and minute: +hhmm or -hhmm. 
+")`
+source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| rex field= "(?&lt;dateTtime&gt;....-..-..T..:..:..).*?"
+| eval _time = strptime( 'computer.general.last_enrolled_date_utc', "%FT%T.%3N%z")
+| timechart span=1day count by true()</query>
+          <earliest>-90d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Days Since Last Contact</title>
+        <search>
+          <query>source="jamf://JamfPro_Computers"
+| dedup computer.general.id
+`comment("Take the epoch time (in milliseconds), 
+          devide by 1000 to get seconds, 
+          get offset from now,
+          devide by 60*60*24 to get days
+          floor to get days as integer
+        ")`
+| eval daysSinceLastContact=floor((now()-('computer.general.last_contact_time_epoch'/1000))/(60*60*24))
+| stats count by daysSinceLastContact
+| sort daysSinceLastContact
+| makecontinuous daysSinceLastContact 
+| rename count as "Devices", daysSinceLastContact as "Days Since Last Contact"</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
