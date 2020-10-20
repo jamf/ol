@@ -2,3 +2,4 @@
 .DS_Store
 Idnomic/*
 ol/Jamf-Reporting/splunk/jamf_splunk_api_export_scripts/.idea/*
+*.pages
