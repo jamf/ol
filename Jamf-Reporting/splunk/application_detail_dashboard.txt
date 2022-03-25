@@ -1,0 +1,118 @@
+<form theme="dark">
+  <label>Jamf Computer Application</label>
+  <description>Shows detailed information about a single application from Jamf Pro Add-on</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="dropdown" token="appName">
+      <label>Application Name</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>app.name</fieldForLabel>
+      <fieldForValue>app.name</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.bundleId="$appBundleId$"
+| stats count by app.name</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="appBundleId">
+      <label>Application Bundle Id</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>app.bundleId</fieldForLabel>
+      <fieldForValue>app.bundleId</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.name="$appName$" | stats count by app.bundleId</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="appVersion">
+      <label>Application Version</label>
+      <choice value="*">Any</choice>
+      <fieldForLabel>app.version</fieldForLabel>
+      <fieldForValue>app.version</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.name="$appName$"| stats count by app.version</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Total Installs</title>
+      <single>
+        <title>Current Installs</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$"| dedup app.name, computer_meta.id | stats count as totalInstalls</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">251</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Installed from Mac App Store</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$"| dedup app.name, computer_meta.id | chart count by app.macAppStore</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Application Versions</title>
+      <chart>
+        <title>Application Version</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$"| dedup app.name, computer_meta.id | chart count by app.version</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Versions Over Time</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name = "$appName$"| timechart  count by app.version</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$"| dedup app.name, computer_meta.id | table computer_meta.name, computer_meta.managed, computer_meta.supervised, computer_meta.serial, computer_meta.id, computer_meta.reportDate</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
