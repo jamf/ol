@@ -1,0 +1,111 @@
+<form theme="dark">
+  <label>Jamf Computer Applications</label>
+  <description>A Dashboard to show information about applications from the Jamf Pro Add-On.</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="dropdown" token="appName">
+      <label>Application Name</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>app.name</fieldForLabel>
+      <fieldForValue>app.name</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.bundleId = "*"| stats count by app.name</query>
+      </search>
+    </input>
+    <input type="dropdown" token="appBundleId">
+      <label>Application Bundle Id</label>
+      <choice value="*">Any</choice>
+      <fieldForLabel>app.bundleId</fieldForLabel>
+      <fieldForValue>app.bundleId</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.name="$appName$"
+| stats count by app.bundleId</query>
+      </search>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="dropdown" token="assignedUser">
+      <label>Assigned User</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>computer_meta.assignedUser</fieldForLabel>
+      <fieldForValue>computer_meta.assignedUser</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.bundleId = "*"| stats count by computer_meta.assignedUser</query>
+      </search>
+    </input>
+    <input type="dropdown" token="serialNumber">
+      <label>Computer Serial Number</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>computer_meta.serial</fieldForLabel>
+      <fieldForValue>computer_meta.serial</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" app.bundleId = "*"| stats count by computer_meta.serial</query>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>App Installs Last 24 Hours</title>
+      <single>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$" computer_meta.assignedUser="$assignedUser$" computer_meta.serial="$serialNumber$"| dedup app.name, computer_meta.id | stats count as totalInstalls</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">245</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Apps On Latest Version</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$" computer_meta.assignedUser="$assignedUser$" computer_meta.serial="$serialNumber$"| dedup app.name, computer_meta.id | chart count by app.macAppStore</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$" computer_meta.assignedUser="$assignedUser$" computer_meta.serial="$serialNumber$"| stats count by app.name | sort count desc</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">-90</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Applications Over Time</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" app.name ="$appName$" app.bundleId = "$appBundleId$" computer_meta.assignedUser="$assignedUser$" computer_meta.serial="$serialNumber$"| timechart count by app.name</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</form>
