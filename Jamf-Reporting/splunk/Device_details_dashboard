@@ -1,0 +1,124 @@
+<form theme="dark">
+  <label>JamfComputerDeviceDetails</label>
+  <description>Jamf Computer Device Details page with ability to jump back in time.</description>
+  <fieldset submitButton="false">
+    <input type="dropdown" token="jssID">
+      <label>Jamf Pro ID</label>
+      <choice value="*">Any</choice>
+      <search>
+        <query>sourcetype="jssUapiComputer:*" computer_meta.id="*" computer_meta.reportDate="*" computer_meta.assignedUser="$assignedUser$" computer_meta.eventID="*" | stats count by computer_meta.id</query>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </search>
+      <fieldForLabel>computer_meta.id</fieldForLabel>
+      <fieldForValue>computer_meta.id</fieldForValue>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="dropdown" token="assignedUser">
+      <label>Assigned User</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>computer_meta.assignedUser</fieldForLabel>
+      <fieldForValue>computer_meta.assignedUser</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:app" computer_meta.id="$jssID$" | dedup computer_meta.assignedUser | table computer_meta.assignedUser</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="reportDate">
+      <label>Report Date</label>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>computer_meta.reportDate</fieldForLabel>
+      <fieldForValue>computer_meta.reportDate</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:*" computer_meta.id="$jssID$" computer_meta.reportDate="*" computer_meta.eventID="*" | stats count by computer_meta.reportDate</query>
+      </search>
+    </input>
+    <input type="dropdown" token="eventID">
+      <label>Event ID</label>
+      <choice value="*">any</choice>
+      <fieldForLabel>computer_meta.eventID</fieldForLabel>
+      <fieldForValue>computer_meta.eventID</fieldForValue>
+      <search>
+        <query>sourcetype="jssUapiComputer:*" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="*" | dedup computer_meta.eventID| table computer_meta.eventID</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Installed Applications Table</title>
+      <table>
+        <title>Installed Applications Table</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:app" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="$eventID$"| table app.name, app.bundleId, app.version, app.macAppStore, app.path</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Local Accounts</title>
+      <table>
+        <title>Machine Local Accounts</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:localAccount" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="$eventID$" | table localAccount.admin, localAccount.fileVault2Enabled, localAccount.fullName, localAccount.homeDirectory, localAccount.uid, localAccount.username</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Extension Attributes</title>
+      <table>
+        <search>
+          <query>sourcetype="jssUapiComputer:extensionAttribute" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="$eventID$" | table extensionAttribute.definitionId, extensionAttribute.description, extensionAttribute.enabled, extensionAttribute.name, extensionAttribute.value</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>sourcetype="jssUapiComputer:*" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="$eventID$" groupMembership.groupId="*" | table groupMembership.groupId, groupMembership.groupName, groupMembership.smartGroup</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Raw Events</title>
+      <event>
+        <search>
+          <query>sourcetype="jssUapiComputer:*" computer_meta.id="$jssID$" computer_meta.reportDate="$reportDate$" computer_meta.eventID="$eventID$"</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+    </panel>
+  </row>
+</form>
