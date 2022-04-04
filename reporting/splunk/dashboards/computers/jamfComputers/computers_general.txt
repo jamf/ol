@@ -1,0 +1,453 @@
+<dashboard theme="dark">
+  <label>Jamf Pro Computers Dashboard UAPI</label>
+  <row>
+    <panel>
+      <single>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+``` The above lines select the most recent record from each computer obtained via the Jamf Pro Add-on for Splunk```
+``` Output a simple count of the computers``` 
+| stats count</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">149</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x778899","0x778899"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="underLabel">macOS Computers</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+```The above lines get a set of records with each computer's most recent report ```
+``` Get only managed computers```
+| spath computerGeneral.remoteManagement.managed
+| search computerGeneral.remoteManagement.managed=true
+``` Output a simple count of the computers``` 
+| stats count</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">149</option>
+        <option name="rangeColors">["0x3CB371","0x3CB371"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">Managed</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+```The above lines get a set of records with each computer's most recent report ```
+``` Get only managed computers```
+| spath computerGeneral.remoteManagement.managed
+| search computerGeneral.remoteManagement.managed=false
+``` Output a simple count of the computers``` 
+| stats count</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">149</option>
+        <option name="rangeColors">["0xB0C4DE","0xB0C4DE"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">Unmanaged</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Device Model and Version</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerHardware"
+| dedup computer_meta.id 
+``` Summarize by model ```
+| stats count by computerHardware.model 
+| rename computerHardware.model as 'Model', count as 'Count'
+``` Print from most common to least ```
+| sort count desc</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="height">175</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Device Model</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerHardware"
+| dedup computer_meta.id 
+``` Add a model_type field ```
+``` The value is modelIdentifier without the version. ```
+``` e.g., "MacBookPro12,1" becomes just "MacBookPro" ```
+| rex field=computerHardware.modelIdentifier "(?&lt;modelType&gt;[^\d]+).*"
+| rename modelType AS "Model Type"
+``` Summarize by model_type ``` 
+| stats count by "Model Type"
+| replace Macmini with "Mac mini", MacBookPro with "MacBook Pro", MacBookAir with "MacBook Air", VirtualMac with "Virtualized"
+``` Order from most common to least ``` 
+| sort - count</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1,0x9eb8d5,0xf4f6f9,0x37bb9a,0xe8573f,0xd94453,0xd670ac,0x69699d]</option>
+        <option name="height">187</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <map>
+        <title>Device Locations</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+``` Add geographical information based on IP address ```
+| iplocation computerGeneral.lastIpAddress
+``` Get the best choice for a city value to show in heatmap hover detail ``` 
+| eval City = if (City = "", if(Region = "", if(Country = "", "N/A", Country), Region), City) 
+``` Add the fields for heatmap hover detail ```
+| geostats count by City globallimit=0</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="height">313</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">auto</option>
+        <option name="mapping.choroplethLayer.maximumColor">0x5b6982</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x5b6982</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(38.75,-96.5)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">4</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.seriesColors">[0x778eb1]</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">marker</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Remote Management Enabled</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+``` Map values so they're human-readable``` 
+| replace "true" with "Yes", "false" with "No" in computerGeneral.userApprovedMdm
+``` Summarize by userApprovedMdm ``` 
+| chart count by computerGeneral.userApprovedMdm</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Supervised</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+| replace "true" with "Yes", "false" with "No" in computerGeneral.supervised
+| chart count by computerGeneral.supervised</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>MDM Capable</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+| replace "true" with "Yes", "false" with "No" in computerGeneral.mdmCapable.capable
+| chart count by computerGeneral.mdmCapable.capable</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Automated Enrollment</title>
+      <chart>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id 
+| replace "true" with "Yes", "false" with "No" in computerGeneral.enrolledViaAutomatedDeviceEnrollment
+| chart count by computerGeneral.enrolledViaAutomatedDeviceEnrollment</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>User Approved MDM</title>
+      <chart>
+        <search>
+          <query>source="jamf://JamfPro_Computers" 
+| dedup computer.general.id 
+| replace "true" with "Yes", "false" with "No" in computer.general.management_status.user_approved_mdm
+| chart count by computer.general.management_status.user_approved_mdm</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Device Enrollments by Date</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id
+``` Convert lastEnrolledDate to a Splunk time, and overwrite that into Splunk's _time meta field ```
+| eval _time = strptime( 'computerGeneral.lastEnrolledDate', "%FT%T.%3QZ")
+``` Summarize the data into 1-day intervals ``` 
+| timechart span=1day count by true()</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="height">213</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <viz type="semicircle_donut.semicircle_donut">
+        <title>Device Last Check-in by Range</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id
+| spath computerGeneral.remoteManagement.managed
+| search computerGeneral.remoteManagement.managed=true
+| eval last_contact_epoch = strptime( 'computerGeneral.lastContactTime', "%FT%T.%3QZ")
+| eval secondsSinceLastContact = now()-last_contact_epoch
+| eval daysSinceLastContact = round(secondsSinceLastContact/86400)
+| eval contactRange = case(
+daysSinceLastContact&lt;=1,"Today", 
+daysSinceLastContact&lt;7,"Past Week", 
+daysSinceLastContact&lt;31,"Past Month",
+daysSinceLastContact&lt;=90,"Past Quarter",
+daysSinceLastContact&lt;=365,"Past Year",
+true(),"More than a year")
+| stats count by contactRange
+| eval printOrder = case(
+contactRange="Today",1, 
+contactRange="Past Week", 2, 
+contactRange="Past Month", 3,
+contactRange="Past Quarter", 4,
+contactRange="Past Year", 5,
+true(), 6)
+| sort printOrder
+| fields - printOrder
+| eval color = case(
+contactRange="Today", "Green", 
+contactRange="Past Week", "Lightgreen", 
+contactRange="Past Month", "LightGoldenRodYellow",
+contactRange="Past Quarter", "Yellow",
+contactRange="Past Year", "IndianRed",
+true(),"Red")</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="height">215</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="semicircle_donut.semicircle_donut.colorField">color</option>
+        <option name="semicircle_donut.semicircle_donut.cutoutPercentage">50</option>
+        <option name="semicircle_donut.semicircle_donut.legendPosition">right</option>
+        <option name="semicircle_donut.semicircle_donut.type">half</option>
+      </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Days Since Last Check-in</title>
+        <search>
+          <query>sourcetype="jssUapiComputer:computerGeneral"
+| dedup computer_meta.id
+``` Get only the managed devices ```
+| spath computerGeneral.remoteManagement.managed
+| search computerGeneral.remoteManagement.managed=true
+```We now have a set of records with each computers most recent report ```
+```Convert last contact time to epoch format ```
+| eval last_contact_epoch = strptime( 'computerGeneral.lastContactTime', "%FT%T.%3QZ")
+``` Subtract from now to see how much time has elapsed ```
+| eval secondsSinceLastContact = now()-last_contact_epoch
+``` Convert from seconds to days```
+| eval daysSinceLastContact = round(secondsSinceLastContact/86400)
+``` Filter for devices that we might have a shot at finding... ```
+| where daysSinceLastContact &lt;= 60
+``` Filter out devices we've seen in the last couple weeks -- they're of no concern```
+| where daysSinceLastContact &gt; 14 
+``` Summarize computer records by the days since last contact ```
+| stats Count by daysSinceLastContact
+``` Some days could have no records so fill in the blanks ```
+| makecontinuous daysSinceLastContact 
+``` Show longest (worst) times first ```
+| sort - daysSinceLastContact
+| rename daysSinceLastContact as "Days Since Last Contact"</query>
+          <earliest>-60d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">minmax</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0x5b6982,0x778eb1]</option>
+        <option name="height">176</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
