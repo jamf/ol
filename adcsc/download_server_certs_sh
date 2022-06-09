@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Change the host-name and port below to your server then run the script. 
-# The script will tell you about it's server trust cert and save it's cacert trust chain 
-#   to your desktop. 
+# The script will tell you about the server's trust cert and save the server's public cacert 
+#   chain to your desktop. 
 
 # We often use this script when we need to upload the trust chain for an LDAP server when setting up Jamf Pro
 
