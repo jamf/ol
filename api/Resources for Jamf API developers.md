@@ -29,21 +29,21 @@ The site includes coverage of our older but still supported "[Classic](https://d
 - [Scalability](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-scalability-best-practices) -- Advice on ensuring your API consumption doesn't impact the Jamf Pro application's core device management functions. 
 - [Optimistic Locking](https://developer.jamf.com/jamf-pro/docs/optimistic-locking) -- Applications often read a record (e.g. to display some data) then write an update back (e.g. because the user edited the data). Optimistic locking give developers a way to make sure that the record wasn't updated by some other process between the read and write on a particular client. 
 
-**Swagger Sandbox**
+**Swagger Docs** 
 
-The Jamf Pro Application exposes Swagger documentation at https://your-instance.jamfcloud.com/api. Swagger pages show the different variations and http methods for each endpoint. Many include a code example, example responses, and available parameters. You can use the test functions to try the commands on your own data before you start programming.
+The Jamf Pro Application exposes Swagger documentation at https://your-instance.jamfcloud.com/api. Swagger pages show the different variations and http methods for each API endpoint. Many include a code example, example responses, and available parameters. You can use the test functions to try the commands on your own data before you start adding them to your code. 
 
 **Postman Collection**  
 
-The Postman application can be used to explore API functions. A collection for the Jamf Pro API is available [here](https://developer.jamf.com/title-editor/docs/postman-collection). 
+Like the Swagger docs, the Postman application can be used to explore API functions. A collection for the Jamf Pro API is available [here](https://developer.jamf.com/title-editor/docs/postman-collection). 
 
 **Open API Specification**
 
-The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating Swift application development. 
+The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating application development. 
 
-**Writing call-backs**
+**Webhooks**
 
-Event-driven workflows can be triggered by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled and use it's inventory data to update an asset management or help desk system in real-time. 
+You can trigger actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled, fetch the device's full inventory data via the Jamf Pro API,  and use that to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
 
 ## Learning Resources
 
@@ -59,7 +59,7 @@ Jamf offers formal training courses for those wno prefer a more structured learn
 
 **Jamf Nation User Conference (JNUC)**
 
-The Jamf User community presents API-related sessions at our annual user conference and other MacAdmin confere. Many are instructional in nature, or they demonstrate typical applications for using APIs with Jamf Products. 
+Members of the Jamf User community often present API-related sessions at our annual user conference and at other MacAdmin conferences. Many are instructional in nature, or they demonstrate clever applications of Jamf's product APIs. 
 
 [The Jamf API Ecosystem | JNUC 2022](https://www.jamf.com/resources/videos/the-jamf-api-ecosystem/)
 
@@ -86,9 +86,9 @@ There is no "best" approach. Developers working with Jamf APIs range from highly
 
 #### Python
 
-Perhaps owing to it's popularity at the time most early utilities were being written, and because at that time it still came pre-installed on macOS, Python is widely used by systems programmers in the MacAdmins commutity. 
+Python is widely used by systems programmers in the MacAdmins commutity. 
 
-A number of community members have shared their Python projects with our user community. Look through the project readmes and/or take them for a test-drive to see which one best matches your requirements and preferences around style and approach.  
+A number of community members have shared their Python projects. Look through the project readmes and/or take them for a test-drive to see which one best matches your requirements and preferences for style and approach.  
 
 **[ Jamf Pro API Wrapper](https://gitlab.com/cvtc/appleatcvtc/jps-api-wrapper)**
 
@@ -211,11 +211,67 @@ func main() {
 
 
 
+**Ruby**
+
+[PixarAnimationStudios](https://github.com/PixarAnimationStudios)/**[ruby-jss](https://github.com/PixarAnimationStudios/ruby-jss)**
+
+ruby-jss defines a Ruby module called `Jamf`, which is used for accessing the 'Classic' and 'Jamf Pro' APIs of a Jamf Pro server. The Jamf module maintains connections to both APIs simultaneously, and uses whichever is appropriate as needed. Details like authentication tokens, token refreshing, JSON and XML parsing, and even knowing which resources use which API are all handled under-the-hood.
+
+The Jamf module abstracts many API resources as Ruby objects, and provides methods for interacting with those resources. It also provides some features that aren't a part of the API itself, but come with other Jamf-related tools, such as uploading {Jamf::Package} files to the primary fileshare distribution point, and the installation of those objects on client machines. 
+
+```ruby
+require 'ruby-jss'
+
+# Connect to the API
+Jamf.cnx.connect "https://#{jamf_user}:#{jamf_pw}@my.jamf.server.com/"
+
+# get an array of basic data about all Jamf::Package objects in Jamf Pro:
+pkgs = Jamf::Package.all
+
+# get an array of names of all Jamf::Package objects in the Jamf Pro:
+pkg_names = Jamf::Package.all_names
+
+# Get a static computer group. This creates a new Ruby object
+# representing the existing Jamf computer group.
+mac_group = Jamf::ComputerGroup.fetch name: "Macs of interest"
+
+# Add a computer to the group
+mac_group.add_member "pricklepants"
+
+# save changes back to the server
+mac_group.save
+
+# Create a new network segment to store on the server.
+# This makes a new Ruby Object that doesn't yet exist in Jamf Pro.
+ns = Jamf::NetworkSegment.create(
+  name: 'Private Class C',
+  starting_address: '192.168.0.0',
+  ending_address: '192.168.0.255'
+)
+
+# Associate this network segment with a specific building,
+# which must exist in Jamf Pro, and be listed in Jamf::Building.all_names
+ns.building = "Main Office"
+
+# Associate this network segment with a specific software update server,
+# which must exist in Jamf Pro, and be listed in Jamf::SoftwareUpdateServer.all_names
+ns.swu_server = "Main SWU Server"
+
+# save the new network segment to the server
+ns.save
+```
+
 
 
 ## Developing Automation Solutions
 
 Increasingly, organizations prefer to implement IT operations via code or configuration rather than making changes directly in an application GUI. In this approach, a desired state is defined, typically in a YAML file, and the file is comitted to a GIT branch along with a pull request. A review and approval workflow is followed and the change is merged to a branch where an automated action implements the change in Jamf Pro via an API. 
+
+**Jamf Pro Actions for Apple Shortcuts**
+
+Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. 
+
+https://github.com/Jamf-Concepts/actions
 
 **Deployment Theory Terraform Provider for Jamf Pro**
 
