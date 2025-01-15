@@ -263,7 +263,7 @@ ns.save
 
 **Shell Scripts**
 
-The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first scripts are usually written in a shell like Bash or zShell. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. Sometimes AI services do a good job of providing solutions along with an educational explanation. But not always! Executing a script you do not understand is a recipie for real trouble. So start small and build as you go, learning all the way. 
+The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first attempts are usually written as shell scripts. The free self-paced learning modules from Jamf's Customer Education team mentioned above are a great place to start. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. Sometimes AI does a great job of providing scripted solutions along with an educational explanation. But not always! Executing a script you do not understand is a recipie for real trouble. So start small and build as you go, learning all the way. 
 
 An API Helper bash script is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.sh). It's aimed at self-tought scripters who might be looking for more best practices and new approaches for some common shell scripting challenges. The API Helper script demonstrates the following concepts:
 
@@ -296,7 +296,7 @@ Powershell is an extremely popular language for system administrators. We don't 
 
 **Webhooks**
 
-- You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
+You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
 
 
 **Jamf Pro Actions for Apple Shortcuts**
@@ -306,7 +306,7 @@ Apple's Shortcuts app allows even a non-programmer to link actions and logic to 
 https://github.com/Jamf-Concepts/actions
 
 
-## Configuration by Code and Continuous Integration / Continuous Deployment (CI/CD) Pipelines
+## Configuration by Code: Continuous Integration / Continuous Deployment (CI/CD) Pipelines
 
 **Deployment Theory Terraform Provider for Jamf Pro**
 
