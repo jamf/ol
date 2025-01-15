@@ -269,7 +269,7 @@ ns.save
 
 ## Developing Automation Solutions
 
-Increasingly, organizations prefer to implement IT operations via code or configuration rather than making changes directly in an application GUI. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch and a pull request is submitted. A review and approval workflow is followed and the change is merged to a branch where an automated action implements the change in Jamf Pro via an API. These techniquest can also be used to move a change through test and user acceptance testing before a change is applied to an entire fleet.  
+An increasing number of organizations prefer to implement changes via code or configuration definition files rather than letting a human make changes directly in an application GUI console. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch and a pull request is submitted. A review and approval workflow is followed and the change is merged to a branch where an automated action implements the change in Jamf Pro via an API. These techniquest can also be used to move a change through test and user acceptance testing before a change is applied to an entire fleet.  
 
 
 **Jamf Pro Actions for Apple Shortcuts**
