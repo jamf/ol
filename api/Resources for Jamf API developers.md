@@ -26,36 +26,35 @@ Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/
 
 **Swagger Docs** 
 
-The Jamf Pro Application exposes Swagger documentation at https://your-instance.jamfcloud.com/api. Swagger pages show the different variations and http methods for each API endpoint. Many include a code example, example responses, and available parameters. You can use the test functions to try the commands on your own data before you start adding them to your code. 
+- The Jamf Pro Application exposes Swagger documentation at https://your-instance.jamfcloud.com/api. Swagger pages show the different variations and http methods for each API endpoint. Many include a code example, example responses, and available parameters. You can use the test functions to try the commands on your own data before you start adding them to your code. 
 
 
 **Postman Collection**  
 
-Like the Swagger docs, the Postman application can be used to explore API functions. A collection for the Jamf Pro API is available [here](https://developer.jamf.com/title-editor/docs/postman-collection). 
+- Like the Swagger docs, the Postman application can be used to explore API functions. A collection for the Jamf Pro API is available [here](https://developer.jamf.com/title-editor/docs/postman-collection). 
 
 
 **Open API Specification**
 
-The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating application development. 
+- The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating application development. 
 
 
 **Webhooks**
 
-You can trigger actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled, fetch the device's full inventory data via the Jamf Pro API,  and use that to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
+- You can trigger actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled, fetch the device's full inventory data via the Jamf Pro API,  and use that to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
 
 
 ## Learning Resources
 
 **Jamf-provided self-paced online learning courses**
 
-[Bash Scripting Foundations](https://trainingcatalog.jamf.com/path/bash-scripting-foundations)
-
-[Bash Scripting Automation and API](https://trainingcatalog.jamf.com/path/bash-scripting-automation-and-api)
+- [Bash Scripting Foundations](https://trainingcatalog.jamf.com/path/bash-scripting-foundations)
+- [Bash Scripting Automation and API](https://trainingcatalog.jamf.com/path/bash-scripting-automation-and-api)
 
 
 **Instructor-lead Courses**
 
-Jamf offers formal training courses for those wno prefer a more structured learning and certification path. The [Jamf 300 course](https://www.jamf.com/training/online-training/remote-300/) moves beyond the web console to include API and scripting content while the [Jamf 400 curriculum](https://www.jamf.com/training/online-training/remote-400/) requires participants to employ more advanced API scripting concepts in many of it's excercises. 
+- Jamf offers formal training courses for those wno prefer a more structured learning and certification path. The [Jamf 300 course](https://www.jamf.com/training/online-training/remote-300/) moves beyond the web console to include API and scripting content while the [Jamf 400 curriculum](https://www.jamf.com/training/online-training/remote-400/) requires participants to employ more advanced API scripting concepts in many of it's excercises. 
 
 
 **Blog Posts**
