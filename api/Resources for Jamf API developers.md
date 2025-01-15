@@ -39,11 +39,6 @@ Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/
 - The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating application development. 
 
 
-**Webhooks**
-
-- You can trigger actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled, fetch the device's full inventory data via the Jamf Pro API,  and use that to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
-
-
 ## Learning Resources
 
 **Jamf-provided self-paced online learning courses**
@@ -299,23 +294,29 @@ Powershell is an extremely popular language for system administrators. We don't 
 
 ## Developing Automation Solutions
 
-An increasing number of organizations prefer to implement changes via code or configuration definition files rather than letting a human make changes directly in an application GUI console. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch and a pull request is submitted. A review and approval workflow is followed and the change is merged to a branch where an automated action implements the change in Jamf Pro via an API. These techniquest can also be used to move a change through test and user acceptance testing before a change is applied to an entire fleet.  
+**Webhooks**
+
+- You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
 
 
 **Jamf Pro Actions for Apple Shortcuts**
 
-Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. 
+Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. For example, a cart of shared devices could be attached to a workstation that allows a student or shift-worker to identify the device with the best battery charge and check out the device. A Jamf Action can run to assign the device to the user and automatically deploy the apps and configurations appropriate to their roll or class. When the device is returned to the charging station, an action can reset the device, staging it for the next user. 
 
 https://github.com/Jamf-Concepts/actions
 
 
+## Configuration by Code and Continuous Integration / Continuous Deployment (CI/CD) Pipelines
+
 **Deployment Theory Terraform Provider for Jamf Pro**
 
-This excellent Terraform Provider has very comprehensive coverage of the data models exposed by Jamf Pro's APIs. 
+An increasing number of organizations prefer to implement changes via code or configuration definition files rather than letting a human make changes directly in an application's GUI console. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch. A pull request is submitted to iniitate a review and approval workflow, followed by a sequence of merges to a branch where an automated action implements the change in Jamf Pro via an API. These techniques can also be used to move a change through test and user acceptance testing before anything happens in production where it will impact an entire fleet. This Terraform Provider project has extensive coverage of the data models exposed by Jamf Pro's APIs. 
 
 [terraform-provider-jamfpro](https://github.com/deploymenttheory/terraform-provider-jamfpro)
 
 
 **Software Distribution Workflows**
 
-The [Jamf Sync](https://github.com/jamf/JamfSync#command-line-parameters) project includes a command line option to assist those wishing to develop CI/CD pipelines for software distribution via the Jamf Cloud Distribution Service. A number of other scripts and utilities for syncing files to software distribution points are easily located via Google.  
+Another example is the area of software deployment and patch. An automation can move apps and installers from a staging repository into your software distribution servers and update Jamf Pro to make the software available to devices. 
+
+- The [Jamf Sync](https://github.com/jamf/JamfSync#command-line-parameters) project includes a command line option to assist those wishing to develop CI/CD pipelines for software distribution via the Jamf Cloud Distribution Service. A number of other scripts and utilities for syncing files to software distribution points are easily located via Google.  
