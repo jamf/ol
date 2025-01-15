@@ -221,7 +221,7 @@ func main() {
 
 [PixarAnimationStudios](https://github.com/PixarAnimationStudios)/**[ruby-jss](https://github.com/PixarAnimationStudios/ruby-jss)**
 
-ruby-jss defines a Ruby module called `Jamf`, which is used for accessing the 'Classic' and 'Jamf Pro' APIs of a Jamf Pro server. The Jamf module maintains connections to both APIs simultaneously, and uses whichever is appropriate as needed. Details like authentication tokens, token refreshing, JSON and XML parsing, and even knowing which resources use which API are all handled under-the-hood. The Jamf module abstracts many API resources as Ruby objects, and provides methods for interacting with those resources. It also provides some features that aren't a part of the API itself, but come with other Jamf-related tools, such as uploading {Jamf::Package} files to the primary fileshare distribution point, and the installation of those objects on client machines. 
+ruby-jss defines a Ruby module used to access the 'Classic' and 'Jamf Pro' APIs of a Jamf Pro server. The `Jamf` module maintains connections to both APIs simultaneously, and uses whichever is appropriate as needed. Details like authentication tokens, token refreshing, JSON and XML parsing, and even knowing which resources use which API are all handled under-the-hood. The Jamf module abstracts many API resources as Ruby objects, and provides methods for interacting with those resources. It also provides some features that aren't a part of the API itself, but come with other Jamf-related tools, such as uploading {Jamf::Package} files to the primary fileshare distribution point, and the installation of those objects on client machines. 
 
 ```ruby
 require 'ruby-jss'
@@ -264,6 +264,36 @@ ns.swu_server = "Main SWU Server"
 # save the new network segment to the server
 ns.save
 ```
+
+
+**Shell Scripts**
+
+The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first scripts are usually written in a shell like Bash or zShell. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. Sometimes AI services do a good job of providing solutions along with an educational explanation. But not always! Executing a script you do not understand is a recipie for real trouble. So start small and build as you go, learning all the way. 
+
+An API Helper bash script is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.sh). It's aimed at self-tought scripters who might be looking for more best practices and new approaches for some common shell scripting challenges. The API Helper script demonstrates the following concepts:
+
+- Named function parameters
+- Variable scope in bash
+- Calling functions and assigning output to a variable
+- Returning multiple values from functions (albeit in global vars)
+- Options to log to file or stdout
+- Use of curl timeouts
+- How to handle http session cookies
+- Returning http status for API calls
+- Getting API credentials from keychain
+- Handles Jamf Pro API auth for you, i.e., fetches auth tokens as needed
+- Refreshing auth tokens as they near expiration/Clearing them when done.
+- Error messages relevant to the Jamf Pro API
+- Demonstrate how to parse out data elements
+- Convert child object data (e.g. lists of computer IDs) to iterable arrays
+- Extract data from json via XPath. (Consider using jq instead.)```
+
+Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using many of the techniques from the bash API Helper, it's likely time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts in plaintext. 
+
+
+**PowerShell**
+
+Powershell is an extremely popular language for system administrators. We don't know of a published SDK, but a handly function for handling API auth bearer tokens is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.ps1)
 
 
 
