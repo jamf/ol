@@ -2,6 +2,9 @@
 
 This document is a round-up of offerings that can speed up the learning and development cycle for people wishing to interact with Jamf's APIs. Some are provided by Jamf while others demonstrate the commitment and generousity of the Jamf Nation user community. 
 
+*Corrections and suggestions for new listings are appreciated. Email concepts at jamf or submit a PR/issue.*
+
+
 &nbsp;
 
 ## Documentation
@@ -57,7 +60,7 @@ Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/
 
 &nbsp;
 
-**Jamf-provided self-paced online learning courses**
+**Jamf-provided self-paced online learning modules**
 
 - [Bash Scripting Foundations](https://trainingcatalog.jamf.com/path/bash-scripting-foundations)
 - [Bash Scripting Automation and API](https://trainingcatalog.jamf.com/path/bash-scripting-automation-and-api)
@@ -93,6 +96,13 @@ Members of the Jamf User community often present API-related sessions during our
 - [Use Swift with the Jamf API | JNUC 2022](https://www.youtube.com/watch?v=bZj1wYtOCQI)
 - [Jamf Pro API Wrapper | JNUC 2023](https://www.youtube.com/watch?v=pyf7bGgHpP4)
 - [Mastering Serialized Data | JNUC 2024](https://youtu.be/iHNt2Wc750o?si=9OAlMVQGTu_WdAfb)
+
+
+&nbsp;
+
+**AI**
+
+Sometimes AI can do a shockingly good job of solving an entire scripting problem, or it can get you through a challenging component of a larger project. But beware! Regardless of the source, executing a script you don't fully understand may be a recipie for disaster. 
 
 &nbsp;
 &nbsp;
@@ -141,7 +151,7 @@ with Pro(JPS_URL, USERNAME, PASSWORD) as pro:
 
 **[Jamf Pro SDK for Python](https://github.com/macadmins/jamf-pro-sdk-python)**
 
-This package from Bryson Tyrell / Amazon and published by the MacAdmins Foundation has some of the same basic authentication wrappers but adds a few more advanced features such as support for customer authentication providers and additional options for securing secrets at rest. Rather than creating abstractions for Jamf Pro application models, it leaves specifying the actual API endpoint used by a request to you. 
+This package from Bryson Tyrell / Amazon and published by the MacAdmins Foundation has some of the same basic authentication wrappers but adds a few more advanced features such as support for custom authentication providers and additional options for securing secrets at rest. Rather than creating abstractions for Jamf Pro application models, it leaves you free to specify the actual API endpoint when making a request. 
 
 ```python
 from jamf_pro_sdk import JamfProClient, BasicAuthProvider
@@ -165,7 +175,7 @@ response = client.pro_api.get_computer_inventory_v1(
 
 **[python-jamf](https://github.com/univ-of-utah-marriott-library-apple/python-jamf)**
 
-This project from the team at the University of Utah can be used to access Jamf Pro's Classic API. It implments a class with variables and methods that map directly to the Jamf Pro API. It handles URL requests, authentication, and convertion of XML/JSON API responses to Python dictionaries/lists.
+This project from the team at the University of Utah can be used to access Jamf Pro's Classic API. It implments a class with variables and methods that closely mirror the underlying API structures. It handles URL requests, authentication, and convertion of XML/JSON API responses to Python dictionaries/lists.
 
 ```python
 import python_jamf
@@ -202,7 +212,7 @@ if computer:
 
 [deploymenttheory](https://github.com/deploymenttheory)/**[go-api-sdk-jamfpro](https://github.com/deploymenttheory/go-api-sdk-jamfpro)**
 
-Highly-flexible SDK with extensive examples for seemingly every available Jamf Pro API operations. 
+Highly-flexible SDK with extensive examples for seemingly every available Jamf Pro API option. 
 
 ```go
 package main
@@ -293,7 +303,7 @@ ns.save
 
 **Shell Scripts**
 
-The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first attempts are usually written as shell scripts. The free self-paced learning modules from Jamf's Customer Education team mentioned above are a great place to start. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. Sometimes AI does a great job of providing scripted solutions along with an educational explanation. But not always! Executing a script you do not understand is a recipie for real trouble. So start small and build as you go, learning all the way. 
+The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first attempts are usually written as shell scripts. The free self-paced learning modules from Jamf's Customer Education team mentioned above are a great place to start your adventure. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. So start small and build as you go, learning all the way. 
 
 An API Helper bash script is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.sh). It's aimed at self-tought scripters who might be looking for more best practices and new approaches for some common shell scripting challenges. The API Helper script demonstrates the following concepts:
 
