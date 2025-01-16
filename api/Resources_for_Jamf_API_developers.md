@@ -2,17 +2,21 @@
 
 This document is a round-up of offerings that can speed up the learning and development cycle for people wishing to interact with Jamf's APIs. Some are provided by Jamf while others demonstrate the commitment and generousity of the Jamf Nation user community. 
 
+&nbsp;
 
 ## Documentation
 
 Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/docs/) is the gateway to the endpoint specification pages and also includes articals general topics related to using the API. The site includes coverage of our older but still supported "[Classic](https://developer.jamf.com/jamf-pro/reference/classic-api)" API endpoints and also our newer "[Jamf Pro](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview)" API. These are explained in [Which API Should I Use?](https://developer.jamf.com/jamf-pro/docs/which-api-should-i-use)
 
+&nbsp;
 
 **REST Endpoint Reference Documentation**
 
 - [Classic](https://developer.jamf.com/jamf-pro/reference/classic-api) Endpoints
 - [Jamf Pro](https://developer.jamf.com/jamf-pro/reference/jamf-pro-api) Endpoints
 
+
+&nbsp;
 
 **Commonly-Referenced Topic Pages from the Jamf Developers's WebSite**
 
@@ -24,22 +28,34 @@ Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/
 - [Optimistic Locking](https://developer.jamf.com/jamf-pro/docs/optimistic-locking) -- Applications often read a record (e.g. to display some data) then write an update back (e.g. because the user edited the data). Optimistic locking give developers a way to make sure that the record wasn't updated by some other process between the read and write on a particular client. 
 
 
+&nbsp;
+
 **Swagger Docs** 
 
 - The Jamf Pro Application exposes Swagger documentation at https://your-instance.jamfcloud.com/api. Swagger pages show the different variations and http methods for each API endpoint. Many include a code example, example responses, and available parameters. You can use the test functions to try the commands on your own data before you start adding them to your code. 
 
+
+&nbsp;
 
 **Postman Collection**  
 
 - Like the Swagger docs, the Postman application can be used to explore API functions. A collection for the Jamf Pro API is available [here](https://developer.jamf.com/title-editor/docs/postman-collection). 
 
 
+&nbsp;
+
 **Open API Specification**
 
 - The Open API Specification includes a schema language for describing API endpoints and their output. Developer tools can consume the specification to automatically generate API clients and data models. You can obtain a copy of the current schema from your own Jamf Pro instance at http://your-instance.jamfcloud.com/api/schema. A member of the user community has published [a helpful blog post](https://bryson3gps.wordpress.com/2024/08/26/using-the-swift-openapi-generator-for-the-jamf-pro-api/) describing the use of the schema for accelerating application development. 
 
 
+&nbsp;
+&nbsp;
+
 ## Learning Resources
+
+
+&nbsp;
 
 **Jamf-provided self-paced online learning courses**
 
@@ -47,10 +63,14 @@ Jamf Pro's [API Documentation Landing Page](https://developer.jamf.com/jamf-pro/
 - [Bash Scripting Automation and API](https://trainingcatalog.jamf.com/path/bash-scripting-automation-and-api)
 
 
+&nbsp;
+
 **Instructor-lead Courses**
 
 - Jamf offers formal training courses for those wno prefer a more structured learning and certification path. The [Jamf 300 course](https://www.jamf.com/training/online-training/remote-300/) moves beyond the web console to include API and scripting content while the [Jamf 400 curriculum](https://www.jamf.com/training/online-training/remote-400/) requires participants to employ more advanced API scripting concepts in many of it's excercises. 
 
+
+&nbsp;
 
 **Blog Posts**
 
@@ -59,6 +79,8 @@ A number of community members have published some helpful information in their b
 - [Understanding Jamf Pro API Roles and Clients | Graham Pugh](https://www.jamf.com/blog/understanding-jamf-pro-api-roles-and-clients/)
 - [How to convert Classic API scripts to use bearer token authentication](https://community.jamf.com/t5/tech-thoughts/how-to-convert-classic-api-scripts-to-use-bearer-token/ba-p/273910)
 
+
+&nbsp;
 
 **Conference Presentations**
 
@@ -71,7 +93,9 @@ Members of the Jamf User community often present API-related sessions during our
 - [Use Swift with the Jamf API | JNUC 2022](https://www.youtube.com/watch?v=bZj1wYtOCQI)
 - [Jamf Pro API Wrapper | JNUC 2023](https://www.youtube.com/watch?v=pyf7bGgHpP4)
 - [Mastering Serialized Data | JNUC 2024](https://youtu.be/iHNt2Wc750o?si=9OAlMVQGTu_WdAfb)
- 
+
+&nbsp;
+&nbsp;
 
 ##  Software Development Kits ("SDKs"), Wrapper Functions, and Application Templates
 
@@ -84,12 +108,15 @@ There is no "best" approach. Developers working with Jamf APIs range from highly
 - Repsponse formats -- Normalizing XML, JSON, CSV, etc. into a language-specific data structure like an array or dictionary.   
 - Error handling -- Throwing a terminating error or returning meaningful error messages back to the calling procedure based on context
 
+&nbsp;
 
 #### Python
 
 Python is widely used by systems programmers in the MacAdmins commutity. 
 
 A number of community members have shared their Python projects. Look through the project readmes and/or take them for a test-drive to see which one best matches your requirements and preferences for style and approach.  
+
+&nbsp;
 
 **[ Jamf Pro API Wrapper](https://gitlab.com/cvtc/appleatcvtc/jps-api-wrapper)**
 
@@ -109,6 +136,8 @@ with Pro(JPS_URL, USERNAME, PASSWORD) as pro:
     print(paginate(pro.get_mobile_devices))
 
 ```
+
+&nbsp;
 
 **[Jamf Pro SDK for Python](https://github.com/macadmins/jamf-pro-sdk-python)**
 
@@ -132,7 +161,7 @@ response = client.pro_api.get_computer_inventory_v1(
 
 ```
 
-
+&nbsp;
 
 **[python-jamf](https://github.com/univ-of-utah-marriott-library-apple/python-jamf)**
 
@@ -167,7 +196,7 @@ if computer:
 	computer.delete()
 ```
 
-
+&nbsp;
 
 **Golang**
 
@@ -210,7 +239,7 @@ func main() {
 }
 ```
 
-
+&nbsp;
 
 **Ruby**
 
@@ -260,6 +289,7 @@ ns.swu_server = "Main SWU Server"
 ns.save
 ```
 
+&nbsp;
 
 **Shell Scripts**
 
@@ -285,28 +315,40 @@ An API Helper bash script is available [here](https://github.com/jamf/ol/blob/ma
 
 Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using many of the techniques from the bash API Helper, it's likely time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts in plaintext. 
 
+&nbsp;
 
 **PowerShell**
 
 Powershell is an extremely popular language for system administrators. We don't know of a published SDK, but a handly function for handling API auth bearer tokens is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.ps1)
 
 
+&nbsp;
+&nbsp;
 
 ## Developing Automation Solutions
+
+&nbsp;
 
 **Webhooks**
 
 You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
 
+&nbsp;
 
 **Jamf Pro Actions for Apple Shortcuts**
 
 Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. For example, a cart of shared devices could be attached to a workstation that allows a student or shift-worker to identify the device with the best battery charge and check out the device. A Jamf Action can run to assign the device to the user and automatically deploy the apps and configurations appropriate to their roll or class. When the device is returned to the charging station, an action can reset the device, staging it for the next user. 
 
-https://github.com/Jamf-Concepts/actions
+[Actions for Shortcuts Project Page](https://github.com/Jamf-Concepts/actions)
 
+
+
+<br />
+<br />
 
 ## Configuration by Code: Continuous Integration / Continuous Deployment (CI/CD) Pipelines
+
+<br />
 
 **Deployment Theory Terraform Provider for Jamf Pro**
 
@@ -314,6 +356,7 @@ An increasing number of organizations prefer to implement changes via code or co
 
 [terraform-provider-jamfpro](https://github.com/deploymenttheory/terraform-provider-jamfpro)
 
+&nbsp;
 
 **Software Distribution Workflows**
 
