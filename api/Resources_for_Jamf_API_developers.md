@@ -362,7 +362,7 @@ Apple's Shortcuts app allows even a non-programmer to link actions and logic to 
 
 **Deployment Theory Terraform Provider for Jamf Pro**
 
-An increasing number of organizations prefer to implement changes via code or configuration definition files rather than letting a human make changes directly in an application's GUI console. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch. A pull request is submitted to iniitate a review and approval workflow, followed by a sequence of merges to a branch where an automated action implements the change in Jamf Pro via an API. These techniques can also be used to move a change through test and user acceptance testing before anything happens in production where it will impact an entire fleet. This Terraform Provider project has extensive coverage of the data models exposed by Jamf Pro's APIs. 
+An increasing number of organizations prefer to implement changes via code or configuration definition files rather than letting a human make changes directly in an application's GUI console. In this approach, a desired state is defined, typically in a YAML file or another well-structured format, and the file is comitted to a GIT branch. A pull request is submitted to iniitate a review and approval workflow, followed by a sequence of merges to a branch where an automated action implements the change in Jamf Pro via an API. These techniques can also be used to move a change through test and user acceptance testing before anything happens in production where it will impact an entire fleet. This Terraform Provider has extensive coverage of the data models exposed by Jamf Pro's APIs. 
 
 [terraform-provider-jamfpro](https://github.com/deploymenttheory/terraform-provider-jamfpro)
 
@@ -370,6 +370,7 @@ An increasing number of organizations prefer to implement changes via code or co
 
 **Software Distribution Workflows**
 
-Another example is the area of software deployment and patch. An automation can move apps and installers from a staging repository into your software distribution servers and update Jamf Pro to make the software available to devices. 
+Automations can move apps and installers from a staging repository into your software distribution servers and update Jamf Pro to make the software available to devices. 
 
 - The [Jamf Sync](https://github.com/jamf/JamfSync#command-line-parameters) project includes a command line option to assist those wishing to develop CI/CD pipelines for software distribution via the Jamf Cloud Distribution Service. A number of other scripts and utilities for syncing files to software distribution points are easily located via Google.  
+2
