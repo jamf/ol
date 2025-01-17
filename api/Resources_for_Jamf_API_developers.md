@@ -2,8 +2,6 @@
 
 This document is a round-up of offerings that can speed up the learning and development cycle for people wishing to interact with Jamf's APIs. Some are provided by Jamf while others demonstrate the commitment and generousity of the Jamf Nation user community. 
 
-*Corrections and suggestions for new listings are appreciated. Email concepts at jamf or submit a PR/issue.*
-
 
 &nbsp;
 
@@ -384,3 +382,7 @@ An increasing number of organizations prefer to implement changes via code or co
 Automations can move apps and installers from a staging repository into your software distribution servers and update Jamf Pro to make the software available to devices. 
 
 - The [Jamf Sync](https://github.com/jamf/JamfSync#command-line-parameters) project includes a command line option to assist those wishing to develop CI/CD pipelines for software distribution via the Jamf Cloud Distribution Service. A number of other scripts and utilities for syncing files to software distribution points are easily located via Google.  
+
+--
+
+*Many of the projects listed here are community-driven. Please help us describe your project and give proper attribution. If you have an edit, please email concepts at jamf or submit a PR.*
