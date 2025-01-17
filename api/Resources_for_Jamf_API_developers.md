@@ -130,7 +130,7 @@ A number of community members have shared their Python projects. Look through th
 
 **[ Jamf Pro API Wrapper](https://gitlab.com/cvtc/appleatcvtc/jps-api-wrapper)**
 
-Bryan Weber / Chippewa Valley Technical College's project offers convenience functions, especially around authentication and pagination. It also abstracts some common object types so, for example, you can just ask for things like mobile devices without knowing anything about the underlying REST endpoints being used. 
+Chippewa Valley Technical College's project offers convenience functions, especially around authentication and pagination. It also abstracts some common object types so, for example, you can just ask for things like mobile devices without knowing anything about the underlying REST endpoints being used. 
 
 ```python
 # Print a list of all mobile devices
@@ -151,7 +151,7 @@ with Pro(JPS_URL, USERNAME, PASSWORD) as pro:
 
 **[Jamf Pro SDK for Python](https://github.com/macadmins/jamf-pro-sdk-python)**
 
-This package from Bryson Tyrell / Amazon and published by the MacAdmins Foundation has some of the same basic authentication wrappers but adds a few more advanced features such as support for custom authentication providers and additional options for securing secrets at rest. Rather than creating abstractions for Jamf Pro application models, it leaves you free to specify the actual API endpoint when making a request. 
+Published by the MacAdmins Foundation ([Contributors](https://github.com/macadmins/jamf-pro-sdk-python/graphs/contributors)) has the authentication wrappers you'd expect but adds a few more advanced features such as support for custom authentication providers and additional options for securing secrets at rest. Rather than creating abstractions for Jamf Pro application models, it leaves you free to specify the actual API endpoint when making a request. 
 
 ```python
 from jamf_pro_sdk import JamfProClient, BasicAuthProvider
@@ -323,7 +323,7 @@ An API Helper bash script is available [here](https://github.com/jamf/ol/blob/ma
 - Convert child object data (e.g. lists of computer IDs) to iterable arrays
 - Extract data from json via XPath. (Consider using jq instead.)```
 
-Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using many of the techniques from the bash API Helper, it's likely time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts in plaintext. 
+Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using more than a few of the techniques from the Bash API Helper, it's likely time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts in plaintext or passing them via the command line. 
 
 &nbsp;
 
@@ -341,7 +341,18 @@ Powershell is an extremely popular language for system administrators. We don't 
 
 **Webhooks**
 
-You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks".
+You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks". 
+
+Webhook clients are easy to implement, either as a custom webapp, cloud functions (e.g. AWS Lambda, Azure Functions, GCF) or via no-code automation solution (e.g. Torq, Zapier, Make, Workato). 
+
+There are some useful projects available if you want to create your own stack. 
+ 
+* The [Jamf Pro SDK for Python](https://macadmins.github.io/jamf-pro-sdk-python/webhooks/webhooks_client.html) project mentioned above includes a webhook client and simulator to speed up your test itterations. 
+
+* [JAWA](https://github.com/jamf/JAWA) is a hosting environment for webhook and timed automations. It has a web-based admin console to make automations easier, especially for beginners. 
+ 
+* PixarAnimationStudios / [chook](https://github.com/PixarAnimationStudios/chook) is a Ruby module that implements a framework for working with webhook events. It also provides a simple sinatra-based HTTP server for receiving and processing those events, and classes for sending simulated TestEvents to any Jamf webhook handling server. You do not need to be a Ruby developer to use Chook. 
+ 
 
 &nbsp;
 
@@ -373,4 +384,3 @@ An increasing number of organizations prefer to implement changes via code or co
 Automations can move apps and installers from a staging repository into your software distribution servers and update Jamf Pro to make the software available to devices. 
 
 - The [Jamf Sync](https://github.com/jamf/JamfSync#command-line-parameters) project includes a command line option to assist those wishing to develop CI/CD pipelines for software distribution via the Jamf Cloud Distribution Service. A number of other scripts and utilities for syncing files to software distribution points are easily located via Google.  
-2
