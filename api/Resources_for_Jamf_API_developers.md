@@ -107,9 +107,9 @@ Sometimes AI can do a shockingly good job of solving an entire scripting problem
 
 ##  Software Development Kits ("SDKs"), Wrapper Functions, and Application Templates
 
-Some developer may prefer to code entirely from scratch because they alreaday have generic libraries they like to use when interfacing with APIs, or because they want to learn by doing, or because they prefer not to introduce external code into their projects. But many developers find that starting with a purpose-built  code library cuts their development time and makes their solutions more consistent and reliable. 
+Some developers prefer to code entirely from scratch because they alreaday have generic libraries they like to use when interfacing with APIs, or because they want to learn by doing, or because they prefer not to introduce external code into their projects. But most developers find that starting with a purpose-built code library cuts their development time significantly and makes their solutions more consistent and reliable. 
 
-There is no "best" approach. Developers working with Jamf APIs range from highly-sophisocated software engineers through beginners who are just starting with simple shell scripts. Each of the solutions listed below seeks to solve a different set of problems and may go about it in different ways. A few examples of things that an SDK can handle for you include:
+There is no "best" approach. Developers working with Jamf APIs range from highly-sophisocated software engineers through beginners who are just starting with simple shell scripts. The main difference in the solutions listed below is their programming language. They may address things in different ways and have some different features, but they have a lot in common as far as what they're trying to help us accomplish. A few examples of things that an SDK can handle for you include:
 
 - Authentication -- Exchanging an API key and secret for an access token. Most of these libraries will take care of making sure the token is kept current and added to any API calls made by your program. 
 - Simplified pagination -- Some API endpoints could use a technique called *Pagination* to break very large blobs of data up into managaable chunks that are delivered to the client one page at a time. Many SDKs will provide a tool to take care of making all the sequential page calls needed to retrieve a full result set. 
@@ -122,7 +122,7 @@ There is no "best" approach. Developers working with Jamf APIs range from highly
 
 Python is widely used by systems programmers in the MacAdmins commutity. 
 
-A number of community members have shared their Python projects. Look through the project readmes and/or take them for a test-drive to see which one best matches your requirements and preferences for style and approach.  
+A number of community members have shared their Python projects. Look through the project readme files and/or take them for a test-drive to see which one best matches your requirements and preferences for style and approach.  
 
 &nbsp;
 
@@ -149,7 +149,7 @@ with Pro(JPS_URL, USERNAME, PASSWORD) as pro:
 
 **[Jamf Pro SDK for Python](https://github.com/macadmins/jamf-pro-sdk-python)**
 
-Published by the MacAdmins Foundation ([Contributors](https://github.com/macadmins/jamf-pro-sdk-python/graphs/contributors)) has the authentication wrappers you'd expect but adds a few more advanced features such as support for custom authentication providers and additional options for securing secrets at rest. Rather than creating abstractions for Jamf Pro application models, it leaves you free to specify the actual API endpoint when making a request. 
+Published by the MacAdmins Foundation ([Contributors](https://github.com/macadmins/jamf-pro-sdk-python/graphs/contributors)), this SDK has the authentication wrappers you'd expect but adds a few more advanced features such as support for custom authentication providers and additional options for securing secrets at rest. 
 
 ```python
 from jamf_pro_sdk import JamfProClient, BasicAuthProvider
@@ -173,7 +173,7 @@ response = client.pro_api.get_computer_inventory_v1(
 
 **[python-jamf](https://github.com/univ-of-utah-marriott-library-apple/python-jamf)**
 
-This project from the team at the University of Utah can be used to access Jamf Pro's Classic API. It implments a class with variables and methods that closely mirror the underlying API structures. It handles URL requests, authentication, and convertion of XML/JSON API responses to Python dictionaries/lists.
+This project from the team at the University of Utah can be used to access Jamf Pro's Classic API. It implments a class with variables and methods that closely mirror the underlying API structures. It handles URL requests, authentication, and conversion of XML/JSON API responses to Python dictionaries/lists.
 
 ```python
 import python_jamf
@@ -253,7 +253,7 @@ func main() {
 
 [PixarAnimationStudios](https://github.com/PixarAnimationStudios)/**[ruby-jss](https://github.com/PixarAnimationStudios/ruby-jss)**
 
-ruby-jss defines a Ruby module used to access the 'Classic' and 'Jamf Pro' APIs of a Jamf Pro server. The `Jamf` module maintains connections to both APIs simultaneously, and uses whichever is appropriate as needed. Details like authentication tokens, token refreshing, JSON and XML parsing, and even knowing which resources use which API are all handled under-the-hood. The Jamf module abstracts many API resources as Ruby objects, and provides methods for interacting with those resources. It also provides some features that aren't a part of the API itself, but come with other Jamf-related tools, such as uploading {Jamf::Package} files to the primary fileshare distribution point, and the installation of those objects on client machines. 
+ruby-jss defines a Ruby module used to access the 'Classic' and 'Jamf Pro' APIs of a Jamf Pro server. The `Jamf` module maintains connections to both APIs simultaneously, and uses whichever is appropriate as needed. Details like authentication tokens, token refreshing, JSON and XML parsing, and  knowing which resources use which API are all handled under-the-hood. The Jamf module abstracts many API resources as Ruby objects, and provides methods for interacting with those resources. It also provides some features that aren't a part of the API itself, but come with other Jamf-related tools, such as uploading {Jamf::Package} files to the primary fileshare distribution point, and the installation of those objects on client machines. 
 
 ```ruby
 require 'ruby-jss'
@@ -301,7 +301,9 @@ ns.save
 
 **Shell Scripts**
 
-The vast majority of Apple device admins come to the field as non-programmers. But inevetably, some of us notice that some frequent tasks is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first attempts are usually written as shell scripts. The free self-paced learning modules from Jamf's Customer Education team mentioned above are a great place to start your adventure. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. So start small and build as you go, learning all the way. 
+Most Apple device admins come to the field as non-programmers. But eventually, some of us notice that some frequent task is getting repitious and we start dipping our toes into scripting. Given macOS's Unix underpinnings, these first attempts are usually written as shell scripts. 
+
+The free self-paced learning modules from Jamf's Customer Education team mentioned above are a great place to start your adventure. There are hundreds of example shell scripts easily discoverable via Google and the members of the #scripting channel on Mac Admins Slack are unceasingly helpful. So start small and build as you go, learning all the way. 
 
 An API Helper bash script is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.sh). It's aimed at self-tought scripters who might be looking for more best practices and new approaches for some common shell scripting challenges. The API Helper script demonstrates the following concepts:
 
@@ -321,13 +323,13 @@ An API Helper bash script is available [here](https://github.com/jamf/ol/blob/ma
 - Convert child object data (e.g. lists of computer IDs) to iterable arrays
 - Extract data from json via XPath. (Consider using jq instead.)```
 
-Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using more than a few of the techniques from the Bash API Helper, it's likely time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts in plaintext or passing them via the command line. 
+Many find they can solve lots of problems quite nicely with a shell script and will never need anything more. But if you're using more than a few of the techniques from the Bash API Helper, it's probably time to bite the bullet and graduate to Python or another more modern language. Note that the API helper script uses functions from the [Get API Credentials](https://github.com/jamf/ol/tree/master/api/jamfpro/getJamfApiCredentials) project to read API authentication secrets from options like environment variables or keychain so you can avoid the strongly-discouraged practice of putting them in your scripts as plaintext or passing them via the command line. 
 
 &nbsp;
 
 **PowerShell**
 
-Powershell is an extremely popular language for system administrators. We don't know of a published SDK, but a handly function for handling API auth bearer tokens is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.ps1)
+Powershell is an extremely popular language for system administrators. We don't know of a published SDK, but a handy function for handling API auth bearer tokens is available [here](https://github.com/jamf/ol/blob/master/api/jamfpro/jamfProApiHelper/jamfProApiHelper.ps1)
 
 
 &nbsp;
@@ -341,25 +343,24 @@ Powershell is an extremely popular language for system administrators. We don't 
 
 You can trigger external actions by setting up a [Webhook](https://developer.jamf.com/jamf-pro/docs/webhooks-1) in Jamf Pro. For example, your application could recieve a notification that a new device has been enrolled. In response, it might fetch the device's full inventory data via the Jamf Pro API and use the information to update an asset management or help desk system in real-time. These kinds of arrangements are sometimes called "event-driven workflows" or "callbacks". 
 
-Webhook clients are easy to implement, either as a custom webapp, cloud functions (e.g. AWS Lambda, Azure Functions, GCF) or via no-code automation solution (e.g. Torq, Zapier, Make, Workato). 
+Webhook clients are easy to implement, either as a custom webapp, cloud functions (e.g. AWS Lambda, Azure Functions, GCF) or via no/low-code automation solution (e.g. Torq, Zapier, Make, Workato). 
 
 There are some useful projects available if you want to create your own stack. 
  
+* PixarAnimationStudios / [chook](https://github.com/PixarAnimationStudios/chook) is a Ruby module that implements a framework for working with webhook events. It also provides a simple sinatra-based HTTP server for receiving and processing those events, and classes for sending simulated TestEvents to any Jamf webhook handling server. You do not need to be a Ruby developer to use Chook. 
+
 * The [Jamf Pro SDK for Python](https://macadmins.github.io/jamf-pro-sdk-python/webhooks/webhooks_client.html) project mentioned above includes a webhook client and simulator to speed up your test itterations. 
 
-* [JAWA](https://github.com/jamf/JAWA) is a hosting environment for webhook and timed automations. It has a web-based admin console to make automations easier, especially for beginners. 
- 
-* PixarAnimationStudios / [chook](https://github.com/PixarAnimationStudios/chook) is a Ruby module that implements a framework for working with webhook events. It also provides a simple sinatra-based HTTP server for receiving and processing those events, and classes for sending simulated TestEvents to any Jamf webhook handling server. You do not need to be a Ruby developer to use Chook. 
+* [JAWA](https://github.com/jamf/JAWA) is a hosting environment you can install on a server to implement webhook responders and scehedule scripted automation runs. It has a web-based admin console to make automations easier, especially for beginners. 
  
 
 &nbsp;
 
 **Jamf Pro Actions for Apple Shortcuts**
 
-Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. For example, a cart of shared devices could be attached to a workstation that allows a student or shift-worker to identify the device with the best battery charge and check out the device. A Jamf Action can run to assign the device to the user and automatically deploy the apps and configurations appropriate to their roll or class. When the device is returned to the charging station, an action can reset the device, staging it for the next user. 
+Apple's Shortcuts app allows even a non-programmer to link actions and logic to create a workflow. This Action set makes it easy to include API interactions with a Jamf Pro server. Many clever automations are possible, especially when actions or triggers from Apple Configurator are included. For example, a cart of shared devices could be attached to a workstation that allows a student or shift-worker to identify the device with the best battery charge and check out the device. A Jamf Action can run to assign the device to the user and automatically deploy the apps and configurations appropriate to their role or class. When the device is returned to the charging station, an action can reset the device, clearing the user association in Jamf Pro and staging it for the next user. 
 
 [Actions for Shortcuts Project Page](https://github.com/Jamf-Concepts/actions)
-
 
 
 <br />
@@ -385,4 +386,4 @@ Automations can move apps and installers from a staging repository into your sof
 
 --
 
-*Many of the projects listed here are community-driven. Please help us describe your project and give proper attribution. If you have an edit, please email concepts at jamf or submit a PR.*
+*Many of the projects listed here are community-driven. Please help us describe your project and give proper attribution. If you have any edits, please email us at concepts (at jamf) or submit a PR.*
